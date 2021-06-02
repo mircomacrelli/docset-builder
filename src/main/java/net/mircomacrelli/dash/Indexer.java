@@ -49,21 +49,29 @@ final class Indexer {
         try (var connection = dataSource.getConnection();
              var insert = connection.prepareStatement(INSERT)) {
             insert.setString(1, title);
-            insert.setString(2, getRelativePath(path));
+            var relativePath = getRelativePath(path);
+            insert.setString(2, relativePath);
             insert.execute();
+            System.out.println("INDEX: " + relativePath + " -> " + title);
         }
     }
 
     private void indexPage(Path path) throws IOException, SQLException {
         var doc = Jsoup.parse(path.toFile(), StandardCharsets.UTF_8.toString());
-        var title = doc.selectFirst(docset.titleSelector()).text();
+        var node = doc.selectFirst(docset.titleSelector());
 
+        if (node == null) {
+            System.err.println("NOT FOUND: " + docset.titleSelector() + " -> " + getRelativePath(path));
+            return;
+        }
+
+        var title = node.text();
         if (title.isBlank()) {
-            throw new IllegalStateException("the title is blank");
+            System.err.println("EMPTY: " + docset.titleSelector() + " -> " + getRelativePath(path));
+            return;
         }
 
         insertPage(path, title);
-        System.out.println("INDEX: " + title);
     }
 
     public void indexPages() throws SQLException, IOException {
