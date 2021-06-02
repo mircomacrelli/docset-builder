@@ -45,6 +45,10 @@ final class Crawler {
         return URI.create(substringUntil(substringUntil(uri, '?'), '#'));
     }
 
+    private static boolean isCss(Path path) {
+        return path.getFileName().toString().endsWith(".css");
+    }
+
     private boolean isInDocsetDirectory(URI uri) {
         var baseUri = docset.baseUri();
         return uri.getScheme().startsWith("http") &&
@@ -113,7 +117,17 @@ final class Crawler {
         }
     }
 
-    private void downloadMissingResources(Path page, Path file) {
+    private Set<Path> cssImports(Path path) throws IOException {
+        try (var lines = Files.lines(docset.resolvePath(path))) {
+            return lines.flatMap(line -> IMPORT.matcher(line).results())
+                        .map(match -> match.group(2))
+                        .filter(uri -> !uri.startsWith("http"))
+                        .map(uri -> path.getParent().resolve(uri))
+                        .collect(toSet());
+        }
+    }
+
+    private void downloadMissingResources(Path page, Path file) throws IOException {
         var paths = findMissingResources(page, file);
         for (var missing : paths) {
             if (!downloaded.contains(missing)) {
@@ -121,6 +135,12 @@ final class Crawler {
                     downloadPage(missing);
                 } else {
                     downloadFile(missing);
+                    if (isCss(missing)) {
+                        var imports = cssImports(missing);
+                        for (var css : imports) {
+                            downloadFile(css);
+                        }
+                    }
                 }
             }
         }
@@ -165,14 +185,14 @@ final class Crawler {
         return result;
     }
 
-    private void downloadPage(Path page) {
+    private void downloadPage(Path page) throws IOException {
         var file = downloadFile(page);
         if (file.isPresent()) {
             downloadMissingResources(page, file.get());
         }
     }
 
-    public void download() {
+    public void download() throws IOException {
         downloadPage(docset.index());
     }
 }
