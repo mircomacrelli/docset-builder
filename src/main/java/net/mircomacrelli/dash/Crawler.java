@@ -47,8 +47,9 @@ final class Crawler {
 
     private boolean isInDocsetDirectory(URI uri) {
         var baseUri = docset.baseUri();
-        return uri.getHost().equals(baseUri.getHost()) &&
-                uri.getPath().startsWith(baseUri.getPath());
+        return uri.getScheme().startsWith("http") &&
+               uri.getHost().equals(baseUri.getHost()) &&
+               uri.getPath().startsWith(baseUri.getPath());
     }
 
     private Path toRelativePath(URI uri) {
