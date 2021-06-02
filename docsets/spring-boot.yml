@@ -1,0 +1,6 @@
+family: spring
+identifier: spring-boot-reference
+name: Spring Boot Reference
+baseUri: https://docs.spring.io/spring-boot/docs/current/reference/html/
+index: index.html
+titleSelector: h1

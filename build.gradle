@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+
+group 'net.mircomacrelli'
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.28'
+    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.34.0'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'net.mircomacrelli.dash.Application'
+        )
+    }
+}
