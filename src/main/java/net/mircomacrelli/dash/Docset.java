@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 import java.nio.file.*;
+import java.util.*;
 
 import static java.util.Objects.*;
 
@@ -19,7 +20,9 @@ final class Docset {
 
     private final String titleSelector;
 
-    Docset(String basePath, String docsetFamily, String identifier, String name, String baseUri, String index, String titleSelector) {
+    private final Set<String> skipFiles;
+
+    Docset(String basePath, String docsetFamily, String identifier, String name, String baseUri, String index, String titleSelector, Set<String> skipFiles) {
         this.basePath = Paths.get(requireNonNull(basePath));
         this.docsetFamily = requireNonNull(docsetFamily);
         this.identifier = requireNonNull(identifier);
@@ -27,6 +30,7 @@ final class Docset {
         this.baseUri = URI.create(requireNonNull(baseUri));
         this.index = requireNonNull(index);
         this.titleSelector = requireNonNull(titleSelector);
+        this.skipFiles = requireNonNull(skipFiles);
     }
 
     Path docsetDirectory() {
@@ -63,6 +67,10 @@ final class Docset {
 
     public String titleSelector() {
         return titleSelector;
+    }
+
+    public boolean shouldSkip(String file) {
+        return skipFiles.contains(file);
     }
 
     public void createInfoPlist() throws IOException {

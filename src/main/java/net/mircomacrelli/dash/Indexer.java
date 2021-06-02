@@ -81,6 +81,7 @@ final class Indexer {
             var pages = files.filter(Files::isRegularFile)
                              .filter(Utils::isPage)
                              .filter(path -> !path.endsWith(docset.index()))
+                             .filter(path -> !docset.shouldSkip(path.getFileName().toString()))
                              .collect(toList());
             for (var page : pages) {
                 indexPage(page);
