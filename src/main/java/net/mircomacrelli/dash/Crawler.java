@@ -25,7 +25,7 @@ import static net.mircomacrelli.dash.Utils.*;
 
 final class Crawler {
 
-    private static final Pattern IMPORT = Pattern.compile("@import\\s*(?<quote>['\"])(?<file>[^\\\\1]+?)\\k<quote>;");
+    private static final Pattern IMPORT = Pattern.compile("@import\\s*(?:url\\()?(?<quote>['\"])(?<file>[^\\\\1]+?)\\k<quote>\\)?;");
 
     private final Docset docset;
 
