@@ -147,6 +147,9 @@ final class Crawler {
     }
 
     private Optional<Path> downloadFile(URI from, Path to) {
+        if (from.getPath().endsWith("/")) {
+            return Optional.empty();
+        }
         var client =
                 HttpClient.newBuilder()
                           .followRedirects(NEVER)
