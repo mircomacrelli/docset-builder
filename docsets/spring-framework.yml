@@ -1,6 +1,0 @@
-family: spring
-identifier: spring-framework-reference
-name: Spring Framework Reference Documentation
-baseUri: https://docs.spring.io/spring-framework/docs/current/reference/html/
-index: index.html
-titleSelector: h1
