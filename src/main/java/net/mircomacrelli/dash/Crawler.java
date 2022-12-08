@@ -130,7 +130,7 @@ final class Crawler {
     private void downloadMissingResources(Path page, Path file) throws IOException {
         var paths = findMissingResources(page, file);
         for (var missing : paths) {
-            if (!downloaded.contains(missing)) {
+            if (!downloaded.contains(missing) && docset.shouldCrawl(missing)) {
                 if (isPage(missing)) {
                     downloadPage(missing);
                 } else {

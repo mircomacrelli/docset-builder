@@ -22,7 +22,9 @@ final class Docset {
 
     private final Pattern dontIndex;
 
-    Docset(String basePath, String docsetFamily, String identifier, String name, String baseUri, String index, String titleSelector, String dontIndex) {
+    private final Pattern dontCrawl;
+
+    Docset(String basePath, String docsetFamily, String identifier, String name, String baseUri, String index, String titleSelector, String dontIndex, String dontCrawl) {
         this.basePath = Paths.get(requireNonNull(basePath));
         this.docsetFamily = requireNonNull(docsetFamily);
         this.identifier = requireNonNull(identifier);
@@ -31,6 +33,7 @@ final class Docset {
         this.index = requireNonNull(index);
         this.titleSelector = requireNonNull(titleSelector);
         this.dontIndex = dontIndex != null ? Pattern.compile(dontIndex) : null;
+        this.dontCrawl = dontCrawl != null ? Pattern.compile(dontCrawl) : null;
     }
 
     Path docsetDirectory() {
@@ -72,6 +75,13 @@ final class Docset {
     public boolean shouldIndex(Path fileName) {
         if (dontIndex != null) {
             return !dontIndex.matcher(fileName.toString()).find();
+        }
+        return true;
+    }
+
+    public boolean shouldCrawl(Path path) {
+        if (dontCrawl != null) {
+            return !dontCrawl.matcher(path.toString()).find();
         }
         return true;
     }

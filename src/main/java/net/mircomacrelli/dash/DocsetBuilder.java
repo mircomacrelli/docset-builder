@@ -28,7 +28,8 @@ final class DocsetBuilder {
                               configuration.get("baseUri"),
                               configuration.get("index"),
                               configuration.get("titleSelector"),
-                              configuration.get("dontIndex"));
+                              configuration.get("dontIndex"),
+                              configuration.get("dontCrawl"));
         }
     }
 }
