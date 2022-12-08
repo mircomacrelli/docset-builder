@@ -46,7 +46,7 @@ final class Crawler {
     }
 
     private static String removeBadCharacters(String uri) {
-        return uri.replaceAll("`", "");
+        return uri.replaceAll("[{}`]", "");
     }
 
     private static boolean isCss(Path path) {
