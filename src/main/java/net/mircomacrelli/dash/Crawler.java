@@ -45,6 +45,10 @@ final class Crawler {
         return URI.create(substringUntil(substringUntil(uri, '?'), '#'));
     }
 
+    private static String removeBadCharacters(String uri) {
+        return uri.replaceAll("`", "");
+    }
+
     private static boolean isCss(Path path) {
         return path.getFileName().toString().endsWith(".css");
     }
@@ -106,6 +110,7 @@ final class Crawler {
         try {
             var doc = Jsoup.parse(file.toFile(), StandardCharsets.UTF_8.toString(), uri.toString());
             return StreamUtils.concat(getSrcs(doc), getHrefs(doc), getCssImports(doc))
+                              .map(Crawler::removeBadCharacters)
                               .map(Crawler::uriWithoutQueryStringOrComponent)
                               .filter(this::isInDocsetDirectory)
                               .map(this::toRelativePath)
