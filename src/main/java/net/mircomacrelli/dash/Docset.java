@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 import java.nio.file.*;
-import java.util.*;
+import java.util.regex.Pattern;
 
 import static java.util.Objects.*;
 
@@ -20,9 +20,9 @@ final class Docset {
 
     private final String titleSelector;
 
-    private final Set<String> skipFiles;
+    private final Pattern dontIndex;
 
-    Docset(String basePath, String docsetFamily, String identifier, String name, String baseUri, String index, String titleSelector, Set<String> skipFiles) {
+    Docset(String basePath, String docsetFamily, String identifier, String name, String baseUri, String index, String titleSelector, String dontIndex) {
         this.basePath = Paths.get(requireNonNull(basePath));
         this.docsetFamily = requireNonNull(docsetFamily);
         this.identifier = requireNonNull(identifier);
@@ -30,7 +30,7 @@ final class Docset {
         this.baseUri = URI.create(requireNonNull(baseUri));
         this.index = requireNonNull(index);
         this.titleSelector = requireNonNull(titleSelector);
-        this.skipFiles = requireNonNull(skipFiles);
+        this.dontIndex = dontIndex != null ? Pattern.compile(dontIndex) : null;
     }
 
     Path docsetDirectory() {
@@ -69,8 +69,11 @@ final class Docset {
         return titleSelector;
     }
 
-    public boolean shouldSkip(String file) {
-        return skipFiles.contains(file);
+    public boolean shouldIndex(Path fileName) {
+        if (dontIndex != null) {
+            return !dontIndex.matcher(fileName.toString()).find();
+        }
+        return true;
     }
 
     public void createInfoPlist() throws IOException {

@@ -16,14 +16,6 @@ final class DocsetBuilder {
         this.basePath = requireNonNull(basePath);
     }
 
-    private static Set<String> getSkip(Map<String,String> configuration) {
-        var value = configuration.getOrDefault("skip", "");
-        if (value.isBlank()) {
-            return Collections.emptySet();
-        }
-        return Set.of(value.split("\s*,\s*"));
-    }
-
     Docset build(Path configurationFile) throws IOException {
         try (var is = new FileInputStream(configurationFile.toFile())) {
             var yaml = new Yaml();
@@ -36,7 +28,7 @@ final class DocsetBuilder {
                               configuration.get("baseUri"),
                               configuration.get("index"),
                               configuration.get("titleSelector"),
-                              getSkip(configuration));
+                              configuration.get("dontIndex"));
         }
     }
 }

@@ -80,9 +80,8 @@ final class Indexer {
         try (var files = Files.walk(docset.documentsDirectory())) {
             var pages = files.filter(Files::isRegularFile)
                              .filter(Utils::isPage)
-                             .filter(path -> !path.endsWith(docset.index()))
-                             .filter(path -> !docset.shouldSkip(path.getFileName().toString()))
-                             .collect(toList());
+                             .filter(path -> docset.shouldIndex(path.getFileName()))
+                             .toList();
             for (var page : pages) {
                 indexPage(page);
             }
