@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.15.3'
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.28'
     implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.34.0'
 }
