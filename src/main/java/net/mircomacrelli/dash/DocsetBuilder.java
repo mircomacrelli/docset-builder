@@ -10,7 +10,7 @@ import static java.util.Objects.*;
 
 final class DocsetBuilder {
 
-    private String basePath;
+    private final String basePath;
 
     DocsetBuilder(String basePath) {
         this.basePath = requireNonNull(basePath);
