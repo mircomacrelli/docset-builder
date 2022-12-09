@@ -26,6 +26,7 @@ import static net.mircomacrelli.dash.Utils.*;
 final class Crawler {
 
     private static final Pattern IMPORT = Pattern.compile("@import\\s*(?:url\\()?(?<quote>['\"])(?<file>[^\\\\1]+?)\\k<quote>\\)?;");
+    private static final Pattern BAD_CHARACTERS = Pattern.compile("[{}`]");
 
     private final Docset docset;
 
@@ -46,7 +47,7 @@ final class Crawler {
     }
 
     private static String removeBadCharacters(String uri) {
-        return uri.replaceAll("[{}`]", "");
+        return BAD_CHARACTERS.matcher(uri).replaceAll("");
     }
 
     private static boolean isCss(Path path) {
