@@ -9,8 +9,6 @@ import java.nio.file.*;
 import java.sql.*;
 import java.util.*;
 
-import static java.util.stream.Collectors.*;
-
 final class Indexer {
 
     private static final String CREATE_TABLE = "CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, type TEXT, path TEXT);";
